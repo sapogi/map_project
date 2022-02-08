@@ -4,6 +4,7 @@ import sys
 import requests
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QMainWindow
 
 SCREEN_SIZE = [600, 450]
@@ -15,15 +16,10 @@ class Example(QMainWindow):
         self.lon = 37.530887
         self.lat = 55.703118
         self.z = 17
-        self.params = {
-            'll':f'{self.lon},{self.lat}',
-            'z':self.z,
-            'l':'map'
-        }
-
-        self.getImage()
+        self.lay = 'map'
         uic.loadUi('design.ui', self)
-        self.label.setPixmap(QPixmap('map.png'))
+        self.lineEdit.setEnabled(False)
+        self.render_map()
 
     def getImage(self):
 
@@ -43,6 +39,27 @@ class Example(QMainWindow):
     def closeEvent(self, event):
         """При закрытии формы подчищаем за собой"""
         os.remove(self.map_file)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_1:
+            self.lay = 'map'
+            self.render_map()
+        if event.key() == Qt.Key_2:
+            self.lay = 'sat'
+            self.render_map()
+        if event.key() == Qt.Key_3:
+            self.lay = 'sat,skl'
+            self.render_map()
+
+    def render_map(self):
+        self.params = {
+            'll': f'{self.lon},{self.lat}',
+            'z': self.z,
+            'l': self.lay
+        }
+        self.getImage()
+        self.label.setPixmap(QPixmap('map.png'))
+
 
 
 if __name__ == '__main__':
