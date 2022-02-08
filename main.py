@@ -1,7 +1,8 @@
 import os
 import sys
-
+import math
 import requests
+
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
@@ -15,7 +16,8 @@ class Example(QMainWindow):
         super().__init__()
         self.lon = 37.530887
         self.lat = 55.703118
-        self.z = 17
+        self.z = 16
+        self.step = 0.002
         self.lay = 'map'
         uic.loadUi('design.ui', self)
         self.lineEdit.setEnabled(False)
@@ -49,6 +51,18 @@ class Example(QMainWindow):
             self.render_map()
         if event.key() == Qt.Key_3:
             self.lay = 'sat,skl'
+            self.render_map()
+        if event.key() == Qt.Key_A:
+            self.lon -= self.step * math.pow(2, 15 - self.z)
+            self.render_map()
+        if event.key() == Qt.Key_D:
+            self.lon += self.step * math.pow(2, 15 - self.z)
+            self.render_map()
+        if event.key() == Qt.Key_S:
+            self.lat -= self.step * math.pow(2, 15 - self.z)
+            self.render_map()
+        if event.key() == Qt.Key_W:
+            self.lat += self.step * math.pow(2, 15 - self.z)
             self.render_map()
 
     def render_map(self):
