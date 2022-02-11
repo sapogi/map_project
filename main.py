@@ -64,6 +64,12 @@ class Example(QMainWindow):
         if event.key() == Qt.Key_W:
             self.lat += self.step * math.pow(2, 15 - self.z)
             self.render_map()
+        if event.key() == Qt.Key_PageUp:
+            self.z += 1
+            self.render_map()
+        if event.key() == Qt.Key_PageDown:
+            self.z -= 1
+            self.render_map()
 
     def render_map(self):
         self.params = {
